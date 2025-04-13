@@ -56,6 +56,7 @@
       margin: 0.5rem;
       border: 1px solid #FFD700;
       transition: all 0.3s ease;
+      text-align: center;
     }
 
     .btn:hover {
@@ -79,8 +80,19 @@
 
       .btn {
         width: 100%;
-        padding: 0.8rem;
-        font-size: 1rem;
+        padding: 1rem;
+        font-size: 1.1rem;
+      }
+    }
+
+    /* Ajuste adicional para telas muito pequenas */
+    @media (max-width: 400px) {
+      h1 {
+        font-size: 1.6rem;
+      }
+
+      p {
+        font-size: 0.9rem;
       }
     }
   </style>
