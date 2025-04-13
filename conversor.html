@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Conversor de Tempo Multiversal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Crimson Pro', serif;
+      background-color: #000;
+      color: #e0e0e0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 2rem;
+      background-image: radial-gradient(rgba(255, 215, 0, 0.02) 1px, transparent 1px);
+      background-size: 50px 50px;
+    }
+
+    .converter {
+      background: rgba(10, 10, 10, 0.95);
+      border: 1px solid rgba(255, 215, 0, 0.2);
+      border-radius: 18px;
+      padding: 2rem 2.5rem;
+      width: 100%;
+      max-width: 600px;
+      box-shadow: 0 0 15px rgba(255, 215, 0, 0.1);
+      text-align: center;
+    }
+
+    h1 {
+      color: #FFD700;
+      font-size: 2.5rem;
+      text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+      margin-bottom: 2rem;
+      letter-spacing: 2px;
+    }
+
+    .input-field,
+    .select-field {
+      margin-bottom: 1.5rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+      color: #aaa;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    input[type="number"],
+    select {
+      width: 80%;
+      padding: 0.8rem 1rem;
+      font-size: 1rem;
+      background-color: #111;
+      border: 1px solid #333;
+      color: #FFD700;
+      border-radius: 12px;
+      box-shadow: inset 0 0 10px rgba(255, 215, 0, 0.1);
+      transition: 0.3s ease;
+    }
+
+    input:focus,
+    select:focus {
+      outline: none;
+      border-color: #FFD700;
+      box-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+    }
+
+    .resultado {
+      font-size: 1.5rem;
+      color: #FFD700;
+      margin-top: 2rem;
+      padding: 1rem;
+      background-color: #111;
+      border: 1px solid rgba(255, 215, 0, 0.2);
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(255, 215, 0, 0.15);
+    }
+
+    @media (max-width: 600px) {
+      .converter {
+        padding: 1.5rem;
+      }
+
+      input, select {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="converter">
+    <h1>Conversor de Tempo Multiversal</h1>
+
+    <div class="input-field">
+      <label for="valor">Valor</label>
+      <input type="number" id="valor" placeholder="Digite um número" oninput="converter()" />
+    </div>
+
+    <div class="select-field">
+      <label for="unidadeOrigem">De</label>
+      <select id="unidadeOrigem" onchange="converter()"></select>
+    </div>
+
+    <div class="select-field">
+      <label for="unidadeDestino">Para</label>
+      <select id="unidadeDestino" onchange="converter()"></select>
+    </div>
+
+    <div id="resultado" class="resultado"></div>
+  </div>
+
+  <script>
+    const unidades = {
+      "Milissegundo": 0.001,
+      "Segundo": 1,
+      "Minuto": 60,
+      "Hora": 3600,
+      "Período do Dia": 21600,
+      "Dia": 86400,
+      "Semana": 691200,
+      "Quinzena": 1382400,
+      "Mês": 2629800,
+      "Bimestre": 5259600,
+      "Trimestre": 7889400,
+      "Quadrimestre": 10519200,
+      "Semestre": 15778800,
+      "Ano": 31557600,
+      "Quinquênio": 157788000,
+      "Década": 315576000,
+      "Século": 3155760000,
+      "Milênio": 31557600000,
+      "Ceônico": 315576000000,
+      "Época": 4.73364e+16,
+      "Blonkiônico": 6.16798e+17,
+      "Kajiônico": 1.23212e+18,
+      "Estação": 2.46425e+18,
+      "Chronny": 4.9285e+18,
+      "Primal": 9.857e+18,
+      "Arquênia": 1.9714e+19,
+      "Palência": 3.9428e+19,
+      "Sub Período": 7.8856e+19,
+      "Período": 1.57712e+20,
+      "Era": 3.154e+20,
+      "Éon": 3.154e+21
+    };
+
+    const unidadeOrigemSelect = document.getElementById("unidadeOrigem");
+    const unidadeDestinoSelect = document.getElementById("unidadeDestino");
+
+    for (let unidade in unidades) {
+      const opt1 = document.createElement("option");
+      opt1.value = unidade;
+      opt1.innerText = unidade;
+      unidadeOrigemSelect.appendChild(opt1);
+
+      const opt2 = document.createElement("option");
+      opt2.value = unidade;
+      opt2.innerText = unidade;
+      unidadeDestinoSelect.appendChild(opt2);
+    }
+
+    function converter() {
+      const valor = parseFloat(document.getElementById("valor").value);
+      const origem = unidadeOrigemSelect.value;
+      const destino = unidadeDestinoSelect.value;
+
+      if (isNaN(valor) || valor <= 0) {
+        document.getElementById("resultado").innerHTML = `<em>Digite um valor válido.</em>`;
+        return;
+      }
+
+      const valorEmSegundos = valor * unidades[origem];
+      const resultadoFinal = valorEmSegundos / unidades[destino];
+      const texto = `${valor} ${origem} = ${resultadoFinal.toLocaleString(undefined, { maximumFractionDigits: 3 })} ${destino}`;
+      document.getElementById("resultado").innerHTML = texto;
+    }
+  </script>
+</body>
+</html>
